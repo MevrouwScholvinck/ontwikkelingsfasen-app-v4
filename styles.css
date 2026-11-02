@@ -1,0 +1,106 @@
+:root{
+  --bg:#eef4fb;
+  --surface:#ffffff;
+  --surface-soft:#f7fbff;
+  --line:#d7e2ef;
+  --text:#17324d;
+  --muted:#667b94;
+  --primary:#0c67c2;
+  --primary-dark:#084f96;
+  --success:#0f8a56;
+  --warning:#b16a05;
+  --danger:#c53b3b;
+  --shadow:0 14px 28px rgba(15,52,91,.08);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  background:linear-gradient(180deg,#eef4fb 0,#f8fbff 100%);
+  color:var(--text);
+}
+.shell{max-width:1280px;margin:0 auto;padding:32px 20px 64px}
+.hero{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:24px;
+  align-items:start;
+  margin-bottom:24px;
+}
+.hero,.card,.tabs,.setup-warning{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.hero{padding:28px}
+.hero-card{background:var(--surface-soft);border:1px solid var(--line);border-radius:16px;padding:18px}
+.eyebrow{margin:0 0 8px;color:var(--primary);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:.78rem}
+h1,h2,h3{margin-top:0}
+.lead{font-size:1.05rem;max-width:75ch}
+.tabs{display:flex;flex-wrap:wrap;gap:10px;padding:12px;margin-bottom:18px}
+.tab{
+  border:none;background:#edf4fd;color:var(--text);padding:12px 16px;border-radius:999px;cursor:pointer;font-weight:700
+}
+.tab.active{background:var(--primary);color:#fff}
+.panel{display:none}
+.panel.active{display:block}
+.card{padding:22px;margin-bottom:18px}
+.nested-card{background:var(--surface-soft)}
+.setup-warning{padding:14px 18px;margin:0 0 18px;border-left:6px solid var(--warning)}
+.grid-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid-form label{display:flex;flex-direction:column;gap:8px;font-weight:600}
+input,select,textarea{
+  width:100%;padding:12px 14px;border:1px solid #bfd0e4;border-radius:12px;font:inherit;background:#fff
+}
+textarea{min-height:110px;resize:vertical}
+button{
+  border:none;border-radius:12px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer
+}
+.primary-btn{background:var(--primary);color:#fff}
+.primary-btn:hover{background:var(--primary-dark)}
+.secondary-btn{background:#e7effa;color:var(--text)}
+.form-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.span-2{grid-column:span 2}
+.message{margin-top:12px;font-weight:700}
+.message.ok{color:var(--success)}
+.message.error{color:var(--danger)}
+.message.warn{color:var(--warning)}
+.hidden{display:none!important}
+.status-pill{
+  display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#eef3f8;font-weight:700;margin-bottom:12px
+}
+.stack-row{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.small{color:var(--muted)}
+.notice{
+  border:1px dashed #d2a057;background:#fff7ea;padding:12px 14px;border-radius:12px;color:#7a4b00;margin:12px 0
+}
+.notice.strong{font-weight:700}
+.summary-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:18px
+}
+.summary-tile{
+  border:1px solid var(--line);border-radius:14px;padding:14px;background:#fbfdff
+}
+.aspect-card{
+  border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px;background:#fbfdff
+}
+.phase-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}
+.phase-box{
+  border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff
+}
+.choice-row{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px
+}
+.choice-set{display:flex;gap:14px;flex-wrap:wrap}
+.choice-set label{display:flex;gap:6px;align-items:center;font-weight:600}
+.table-wrap{overflow:auto;margin:12px 0 18px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:#eef5fc}
+.output-block{
+  border:1px solid var(--line);border-radius:14px;padding:16px;background:#fbfdff;margin-bottom:14px
+}
+ul.checklist{margin:10px 0 0 18px}
+code{background:#f0f4f8;padding:2px 6px;border-radius:6px}
+@media (max-width: 900px){
+  .hero{grid-template-columns:1fr}
+  .grid-form,.choice-row{grid-template-columns:1fr}
+  .span-2{grid-column:span 1}
+}

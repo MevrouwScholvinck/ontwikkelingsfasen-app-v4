@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ontwikkelingsfasen in een projectgroep</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Brightspace-ready multi-user app</p>
+        <h1>Ontwikkelingsfasen in een projectgroep</h1>
+        <p class="lead">
+          Studenten vullen eerst individueel in waar hun groep nu staat en waar zij individueel naartoe willen.
+          Zodra alle groepsleden hebben ingevuld, verschijnt het groepsdashboard. Daarna kiest de groep samen per aspect
+          een gezamenlijke optie A, B of C en maakt zij concrete afspraken voor het scrumbord.
+        </p>
+      </div>
+      <div class="hero-card">
+        <div class="status-pill" id="connectionStatus">Nog niet verbonden</div>
+        <button id="connectBtn" class="primary-btn">Verbind met Supabase</button>
+        <p class="small">Gebruik eerst de gegevens uit <code>config.js</code>.</p>
+      </div>
+    </header>
+
+    <section class="setup-warning" id="setupWarning">
+      <strong>Instellen nodig:</strong> vul eerst <code>config.js</code> met jouw Supabase URL en publishable key.
+    </section>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="teacher">Docent</button>
+      <button class="tab" data-tab="student">Student</button>
+      <button class="tab" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="output">Output</button>
+    </nav>
+
+    <section class="panel active" id="teacherPanel">
+      <h2>Docentinstellingen</h2>
+      <div class="card">
+        <p>Maak eerst een ronde aan. Je kunt per groep instellen hoeveel studenten er moeten invullen voordat het dashboard zichtbaar wordt.</p>
+        <form id="teacherForm" class="grid-form">
+          <label>
+            Titel van de ronde
+            <input type="text" id="roundTitle" placeholder="Bijv. Projectgroep 1 - week 3" required />
+          </label>
+          <label>
+            Rondecode
+            <input type="text" id="roundCode" maxlength="12" placeholder="Bijv. TEAM1" required />
+          </label>
+          <label>
+            Groep 1: verwacht aantal studenten
+            <input type="number" id="group1Count" min="0" value="4" required />
+          </label>
+          <label>
+            Groep 2: verwacht aantal studenten
+            <input type="number" id="group2Count" min="0" value="4" required />
+          </label>
+          <label>
+            Groep 3: verwacht aantal studenten
+            <input type="number" id="group3Count" min="0" value="4" required />
+          </label>
+          <label>
+            Groep 4: verwacht aantal studenten
+            <input type="number" id="group4Count" min="0" value="4" required />
+          </label>
+          <label>
+            Groep 5: verwacht aantal studenten
+            <input type="number" id="group5Count" min="0" value="4" required />
+          </label>
+          <div class="form-actions span-2">
+            <button type="submit" class="primary-btn">Ronde aanmaken</button>
+            <button type="button" id="fillExampleCodeBtn" class="secondary-btn">Maak voorbeeldcode</button>
+          </div>
+        </form>
+        <div id="teacherMessage" class="message"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="studentPanel">
+      <h2>Student invullen</h2>
+      <div class="card">
+        <form id="studentSetupForm" class="grid-form">
+          <label>
+            Rondecode
+            <input type="text" id="studentRoundCode" placeholder="Bijv. TEAM1" required />
+          </label>
+          <label>
+            Groep
+            <select id="studentGroup" required>
+              <option value="">Kies een groep</option>
+              <option value="1">Groep 1</option>
+              <option value="2">Groep 2</option>
+              <option value="3">Groep 3</option>
+              <option value="4">Groep 4</option>
+              <option value="5">Groep 5</option>
+            </select>
+          </label>
+          <label>
+            Beginletter(s)
+            <input type="text" id="studentInitials" maxlength="8" placeholder="Bijv. MS" required />
+          </label>
+          <div class="form-actions span-2">
+            <button type="submit" class="primary-btn">Start invullen</button>
+          </div>
+        </form>
+        <div id="studentSetupMessage" class="message"></div>
+      </div>
+
+      <div id="questionnaireCard" class="card hidden">
+        <div class="stack-row">
+          <div>
+            <h3>Individuele vragenlijst</h3>
+            <p class="small" id="studentSessionInfo"></p>
+          </div>
+          <button id="saveResponsesBtn" class="primary-btn">Antwoorden opslaan</button>
+        </div>
+        <div id="questionnaireList"></div>
+        <div id="responseMessage" class="message"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="dashboardPanel">
+      <h2>Groepsdashboard</h2>
+      <div class="card">
+        <div class="stack-row">
+          <div>
+            <p class="small" id="dashboardSessionInfo">Koppel eerst een studentensessie om het dashboard te zien.</p>
+          </div>
+          <button id="refreshDashboardBtn" class="secondary-btn">Gegevens verversen</button>
+        </div>
+        <div id="dashboardGate" class="notice">Nog geen gekoppelde studentensessie.</div>
+        <div id="dashboardContent" class="hidden">
+          <div id="completionSummary" class="summary-grid"></div>
+          <div id="dashboardTables"></div>
+          <div class="card nested-card">
+            <h3>Gezamenlijke groepskeuze per aspect</h3>
+            <p class="small">Kies samen per aspect één optie A, B of C en maak daarna een concreet plan.</p>
+            <div id="decisionsContainer"></div>
+            <div class="form-actions">
+              <button id="saveDecisionsBtn" class="primary-btn">Gezamenlijke keuzes opslaan</button>
+            </div>
+            <div id="decisionsMessage" class="message"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="outputPanel">
+      <h2>Checklist en scrumbord-output</h2>
+      <div class="card">
+        <p class="notice strong">
+          Reminder: zet de afspraken altijd in het scrumbord en spreek af wie dit doet.
+        </p>
+        <div id="outputContent">
+          <p class="small">De output verschijnt zodra er voor jullie groep gezamenlijke keuzes en plannen zijn opgeslagen.</p>
+        </div>
+        <div class="form-actions">
+          <button id="refreshOutputBtn" class="secondary-btn">Output verversen</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
